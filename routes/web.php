@@ -30,4 +30,6 @@ Route::group(['prefix' => 'tourism'],function () {
         ]);
     });
     Route::get('/categories', 'TourismCategoryController@get_all_categories');
+    Route::get('/all', 'TourismController@get_all_tourism');
+    Route::get('/search', 'TourismController@get_tourism_by_search');
 });
