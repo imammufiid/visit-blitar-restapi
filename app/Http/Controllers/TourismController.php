@@ -14,7 +14,7 @@ class TourismController extends Controller
       $baseUrl = URL::to("/img") . "/";
       $tourism = Tourism::all();
 
-      if($tourism != null) {
+      if ($tourism != null) {
          $data = [];
 
          foreach ($tourism as $key => $value) {
@@ -28,7 +28,7 @@ class TourismController extends Controller
                'address' => $value->address,
                'latitude' => $value->latitude,
                'longitude' => $value->longitude,
-               'image' => $baseUrl . "tourist_attraction/". "tes.png"
+               'image' => $baseUrl . "tourist_attraction/" . "tes.png"
             ];
             array_push($data, $result);
          }
@@ -50,38 +50,44 @@ class TourismController extends Controller
       $baseUrl = URL::to("/img") . "/";
       $query = request('query');
 
-      $tourism = Tourism::where('name_tourist_attraction', 'LIKE', '%' . $query . '%')->get();
-
-      if($tourism != null) {
-         $data = [];
-
-         foreach ($tourism as $key => $value) {
-            $result = [
-               'id' => $value->id,
-               'category_id' => $value->category_id,
-               'name_tourist_attraction' => $value->name_tourist_attraction,
-               'capasity' => $value->capasity,
-               'price_ticket' => $value->price_ticket,
-               'description' => $value->description,
-               'address' => $value->address,
-               'latitude' => $value->latitude,
-               'longitude' => $value->longitude,
-               'image' => $baseUrl . "tourist_attraction/". "tes.png"
-            ];
-            array_push($data, $result);
-         }
-
+      if ($query == null) {
          return response()->json([
-            'status' => Response::HTTP_OK,
-            'message' => "This data",
-            'data' => $data
-         ], Response::HTTP_OK);
-      } else {
-         return response()->json([
-            'status' => Response::HTTP_NOT_FOUND,
-            'message' => "Data Not Available",
+            'status' => Response::HTTP_BAD_REQUEST,
+            'message' => "Bad Request",
          ]);
+      } else {
+         $tourism = Tourism::where('name_tourist_attraction', 'LIKE', '%' . $query . '%')->get();
+
+         if ($tourism != null) {
+            $data = [];
+
+            foreach ($tourism as $key => $value) {
+               $result = [
+                  'id' => $value->id,
+                  'category_id' => $value->category_id,
+                  'name_tourist_attraction' => $value->name_tourist_attraction,
+                  'capasity' => $value->capasity,
+                  'price_ticket' => $value->price_ticket,
+                  'description' => $value->description,
+                  'address' => $value->address,
+                  'latitude' => $value->latitude,
+                  'longitude' => $value->longitude,
+                  'image' => $baseUrl . "tourist_attraction/" . "tes.png"
+               ];
+               array_push($data, $result);
+            }
+
+            return response()->json([
+               'status' => Response::HTTP_OK,
+               'message' => "This data",
+               'data' => $data
+            ], Response::HTTP_OK);
+         } else {
+            return response()->json([
+               'status' => Response::HTTP_NOT_FOUND,
+               'message' => "Data Not Available",
+            ]);
+         }
       }
    }
-
 }
