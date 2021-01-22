@@ -26,6 +26,24 @@ class TourismController extends Controller
       }
    }
 
-   
+   public function get_tourism_by_search()
+   {
+      $query = request('query');
+
+      $tourism = Tourism::where('name_tourist_attraction', 'LIKE', '%' . $query . '%')->get();
+
+      if($tourism != null) {
+         return response()->json([
+            'status' => Response::HTTP_OK,
+            'message' => "This data",
+            'data' => $tourism
+         ]);
+      } else {
+         return response()->json([
+            'status' => Response::HTTP_NOT_FOUND,
+            'message' => "Data Not Available",
+         ]);
+      }
+   }
 
 }
