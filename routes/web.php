@@ -16,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return response()->json([
+        'message' => "Welcome to Backend",
+        'app_name' =>  env('APP_NAME'),
+        'app_version' => env('APP_VERSION')
+    ]);
 });
 
 Route::group(['prefix' => 'tourism'],function () {
